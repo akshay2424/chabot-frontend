@@ -119,6 +119,43 @@
         <!--Divider-->
         <hr class="my-3" />
         <!--Heading-->
+        <h6 class="navbar-heading text-muted">Topic</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <!-- <a class="nav-link"
+                           href="agent">
+                            <i class="ni ni-bullet-list-67 text-red"></i> List
+                        </a> -->
+            <router-link to="/topic/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/topic/create" class="nav-link">
+              <i class="ni ni-fat-add text-blue"></i> Add
+            </router-link>
+          </li>
+        </ul>
+        <!--Divider-->
+        <hr class="my-3" />
+        <!--Heading-->
+        <h6 class="navbar-heading text-muted">Question</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <!-- <a class="nav-link"
+                           href="agent">
+                            <i class="ni ni-bullet-list-67 text-red"></i> List
+                        </a> -->
+            <router-link to="/question/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+        </ul>
+        <!--Divider-->
+        <hr class="my-3" />
+        <!--Heading-->
         <h6 class="navbar-heading text-muted">Agent</h6>
         <!--Navigation-->
         <ul class="navbar-nav mb-md-3">
@@ -137,7 +174,7 @@
             </router-link>
           </li>
         </ul>
-          <!--Divider-->
+        <!--Divider-->
         <hr class="my-3" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Department</h6>

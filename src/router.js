@@ -51,6 +51,36 @@ const routes =[
         component: () => import(/* webpackChunkName: "demo" */ './views/organization/Edit.vue')
       },
       {
+        path: '/topic/list',
+        name: 'organizationList',
+        component: () => import(/* webpackChunkName: "demo" */ './views/topic/List.vue')
+      },
+      {
+        path: '/topic/create',
+        name: 'topicCreate',
+        component: () => import(/* webpackChunkName: "demo" */ './views/topic/Add.vue')
+      },
+      {
+        path: '/topic/edit',
+        name: 'topicEdit',
+        component: () => import(/* webpackChunkName: "demo" */ './views/topic/Edit.vue')
+      },
+      {
+        path: '/question/list',
+        name: 'questionList',
+        component: () => import(/* webpackChunkName: "demo" */ './views/question/List.vue')
+      },
+      {
+        path: '/answer/list',
+        name: 'answerList',
+        component: () => import(/* webpackChunkName: "demo" */ './views/answer/List.vue')
+      },
+      {
+        path: '/answer/create',
+        name: 'answerCreate',
+        component: () => import(/* webpackChunkName: "demo" */ './views/answer/Add.vue')
+      },
+      {
         path: '/agent/list',
         name: 'agentList',
         component: () => import(/* webpackChunkName: "demo" */ './views/agent/List.vue')

@@ -6,23 +6,18 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
-          <department-table title="Department List"  :data="data"></department-table>
+          <topic-table title="Topic List"  :data="data"></topic-table>
         </div>
       </div>
-      <!-- <div class="row mt-5">
-                <div class="col">
-                    <projects-table type="dark" title="Dark Table"></projects-table>
-                </div>
-            </div> -->
     </div>
   </div>
 </template>
 <script>
-import DepartmentTable from "./Table.vue";
+import TopicTable from "./Table.vue";
 import axios from "axios";
 
 export default {
-  name: "DepartmentList",
+  name: "TopicList",
   data() {
     return {
       data: [],
@@ -30,15 +25,11 @@ export default {
     };
   },
   components: {
-    DepartmentTable,
+    TopicTable,
   },
   created() {
-      //we should handle errors in a more scalabe way, but this works for now
-
-    //   alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
-
       axios
-        .get("department")
+        .get("topic")
         .then((response) => {
         //   alert(response.data);
           if (response.data[1] == 200) {

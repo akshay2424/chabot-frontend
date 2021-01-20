@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import OrganizationTable from "./OrganizationTable.vue";
+import OrganizationTable from "./Table.vue";
 import axios from "axios";
 
 export default {
