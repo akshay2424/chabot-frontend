@@ -115,7 +115,7 @@
                         rows="4"
                         class="form-control form-control-alternative"
                         placeholder="A few words about organization ..."
-                         v-model="model.about"
+                        v-model="model.about"
                       ></textarea>
                     </base-input>
                   </div>
