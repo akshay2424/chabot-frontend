@@ -11,8 +11,8 @@
           </h3>
         </div>
         <div class="col text-right">
-          <router-link to="/agent/create" class="nav-link">
-            <base-button type="primary" size="md">Add Agent</base-button>
+          <router-link to="/organization/create" class="nav-link">
+            <base-button type="primary" size="md">Add Organization</base-button>
           </router-link>
         </div>
       </div>
@@ -31,7 +31,7 @@
         <template slot="columns">
           <th>Name</th>
           <th>Email</th>
-          <th>Shift Name</th>
+          <th>City</th>
           <th>Address</th>
           <th></th>
         </template>
@@ -44,7 +44,7 @@
               </a> -->
               <div class="media-body">
                 <span class="name mb-0 text-sm"
-                  >{{ row.first_name }} {{ row.last_name }}</span
+                  >{{ row.name }}</span
                 >
               </div>
             </div>
@@ -55,11 +55,11 @@
           <td>
             <badge class="badge-dot mr-4">
               <i></i>
-              <span class="status">{{ row.shift_name }}</span>
+              <span class="status">{{ row.city }}</span>
             </badge>
           </td>
           <td class="budget">
-            {{ row.address }}
+            {{ row.address}}
           </td>
           <td class="text-right">
             <base-dropdown class="dropdown" position="right">
@@ -104,7 +104,7 @@
 import axios from "axios";
 
 export default {
-  name: "agent-table",
+  name: "organization-table",
   props: {
     type: {
       type: String,
@@ -120,24 +120,24 @@ export default {
   data() {
     return {
       perPage: 10,
-      agent_id:'',
+      id:'',
       currentPage: 1,
     };
   },
   methods:{
-     handleEdit(agent_id){
-      //  console.log(agent_id)
-      this.$router.push({name:"agentEdit",params:{agent_id:agent_id}});
+     handleEdit(id){
+      //  console.log(id)
+      this.$router.push({name:"organizationEdit",params:{id:id}});
     },
-    handleDelete(agent_id){
-      //  console.log(agent_id)
+    handleDelete(id){
+      //  console.log(id)
       axios
-        .delete("agent/"+agent_id)
+        .delete("organization/"+id)
         .then((response) => {
         //   alert(response.data);
           if (response.data[1] == 204) {
             // this.data=response.data[0];
-           window.location.href="agent/list"
+           window.location.href="organization/list"
             console.log(this.data)
           }
         //   console.log(response.data);

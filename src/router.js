@@ -35,20 +35,50 @@ const routes =[
       //     },
       //   ]
       // },
-   
+      {
+        path: '/organization/list',
+        name: 'organizationList',
+        component: () => import(/* webpackChunkName: "demo" */ './views/organization/List.vue')
+      },
+      {
+        path: '/organization/create',
+        name: 'organizationCreate',
+        component: () => import(/* webpackChunkName: "demo" */ './views/organization/Add.vue')
+      },
+      {
+        path: '/organization/edit',
+        name: 'organizationEdit',
+        component: () => import(/* webpackChunkName: "demo" */ './views/organization/Edit.vue')
+      },
       {
         path: '/agent/list',
-        name: 'AgentList',
+        name: 'agentList',
         component: () => import(/* webpackChunkName: "demo" */ './views/agent/List.vue')
       },
       {
         path: '/agent/create',
-        name: 'AgentCreate',
+        name: 'agentCreate',
         component: () => import(/* webpackChunkName: "demo" */ './views/agent/Add.vue')
       },
       {
+        path: '/department/list',
+        name: 'departmentList',
+        component: () => import(/* webpackChunkName: "demo" */ './views/department/List.vue')
+      },
+      {
+        path: '/department/create',
+        name: 'departmentCreate',
+        component: () => import(/* webpackChunkName: "demo" */ './views/department/Add.vue')
+      },
+      {
+        path: '/department/edit',
+        name: 'departmentEdit',
+        component: () => import(/* webpackChunkName: "demo" */ './views/department/Edit.vue')
+      },
+
+      {
         path: '/agent/edit',
-        name: 'AgentEdit',
+        name: 'agentEdit',
         component: () => import(/* webpackChunkName: "demo" */ './views/agent/Edit.vue')
       },
       {

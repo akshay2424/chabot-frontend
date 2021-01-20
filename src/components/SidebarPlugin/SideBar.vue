@@ -98,6 +98,27 @@
         <!--Divider-->
         <hr class="my-3" />
         <!--Heading-->
+        <h6 class="navbar-heading text-muted">Organization</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <!-- <a class="nav-link"
+                           href="agent">
+                            <i class="ni ni-bullet-list-67 text-red"></i> List
+                        </a> -->
+            <router-link to="/organization/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/organization/create" class="nav-link">
+              <i class="ni ni-fat-add text-blue"></i> Add
+            </router-link>
+          </li>
+        </ul>
+        <!--Divider-->
+        <hr class="my-3" />
+        <!--Heading-->
         <h6 class="navbar-heading text-muted">Agent</h6>
         <!--Navigation-->
         <ul class="navbar-nav mb-md-3">
@@ -112,6 +133,27 @@
           </li>
           <li class="nav-item">
             <router-link to="/agent/create" class="nav-link">
+              <i class="ni ni-fat-add text-blue"></i> Add
+            </router-link>
+          </li>
+        </ul>
+          <!--Divider-->
+        <hr class="my-3" />
+        <!--Heading-->
+        <h6 class="navbar-heading text-muted">Department</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <!-- <a class="nav-link"
+                           href="agent">
+                            <i class="ni ni-bullet-list-67 text-red"></i> List
+                        </a> -->
+            <router-link to="/department/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/department/create" class="nav-link">
               <i class="ni ni-fat-add text-blue"></i> Add
             </router-link>
           </li>
