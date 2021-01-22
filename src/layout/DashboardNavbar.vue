@@ -51,13 +51,9 @@
               <span>Support</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <router-link
-              @click.native="logout"
-              to="#"
-              class="dropdown-item"
-            >
+            <router-link @click.native="logout" to="#" class="dropdown-item">
               <i class="ni ni-user-run"></i>
-              <span >Logout</span>
+              <span>Logout</span>
             </router-link>
           </template>
         </base-dropdown>
@@ -100,11 +96,15 @@ export default {
         })
         .then((response) => {
           alert(response.data);
-          if(response.data[1] == 200){
-            this.$router.push('/login');
+          if (response.data[1] == 200) {
+            console.log(sessionStorage.getItem("loggedIn"));
+            sessionStorage.setItem("loggedIn", false);
+            sessionStorage.setItem("jwt_token", '');
+            console.log(sessionStorage.getItem("loggedIn"));
+            this.$router.push("/login");
           }
-          console.log(response.data[0].message)
-          console.log(response.status)
+          console.log(response.data[0].message);
+          console.log(response.status);
           //handle response and save JWT
         })
         .catch((err) => {

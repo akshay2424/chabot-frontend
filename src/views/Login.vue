@@ -56,7 +56,9 @@
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <a href="#" class="text-light"><small>Forgot password?</small></a>
+          <a href="#" class="text-light"
+            ><small>Forgot password? {{ (message1 = true) }}</small></a
+          >
         </div>
         <div class="col-6 text-right">
           <router-link to="/register" class="text-light"
@@ -71,7 +73,7 @@
 
 <script>
 import axios from "axios";
-
+import store from "../store";
 export default {
   name: "login",
   data() {
@@ -83,11 +85,21 @@ export default {
       showError: false,
     };
   },
+  computed: {
+    message1: {
+      get() {
+        return this.$store.state.user.loggedIn;
+      },
+      set(newValue) {
+        return this.$store.dispatch("setMessage", newValue);
+      },
+    },
+  },
   methods: {
     login() {
       //we should handle errors in a more scalabe way, but this works for now
 
-      alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
+      // alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
 
       axios
         .post("login", {
@@ -101,12 +113,26 @@ export default {
           },
         })
         .then((response) => {
-          alert(response.data);
-          if(response.data[1] == 200){
-            this.$router.push('/dashboard');
+          // alert(response.data);
+          if (response.data[1] == 200) {
+            sessionStorage.setItem(
+              "user_name",
+              response.data[0].user["first_name"] +
+                " " +
+                response.data[0].user["last_name"]
+            );
+            sessionStorage.setItem("jwt_token", response.data[0].token);
+            sessionStorage.setItem("loggedIn", true);
+            console.log(sessionStorage.getItem("jwt_token"));
+            // store.mutations.SET_MESSAGE(user, true);
+            // alert(store.getters.auth.loggedIn);
+
+            // $store.user.loggedIn=true;
+            this.$router.push("/dashboard");
           }
-          console.log(response.data[0].message)
-          console.log(response.status)
+
+          console.log(response.data[0].message);
+          console.log(response.status);
           //handle response and save JWT
         })
         .catch((err) => {

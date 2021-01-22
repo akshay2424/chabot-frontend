@@ -6,7 +6,10 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
-          <organization-table title="Organization List"  :data="data"></organization-table>
+          <organization-table
+            title="Organization List"
+            :data="data"
+          ></organization-table>
         </div>
       </div>
     </div>
@@ -28,29 +31,39 @@ export default {
     OrganizationTable,
   },
   mounted() {
-      //we should handle errors in a more scalabe way, but this works for now
+    //we should handle errors in a more scalabe way, but this works for now
 
     //   alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
 
-      axios
-        .get("organization", { })
-        .then((response) => {
-        //   alert(response.data);
-          if (response.data[1] == 200) {
-            this.data=response.data[0];
-            console.log(this.data)
-          }
-        //   console.log(response.data);
-        //   console.log(response.status);
-          //handle response and save JWT
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
-  methods: {
-    
+    axios
+      .get("organization", {
+        headers: {
+          // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
+          "x-access-token": sessionStorage.getItem("jwt_token"),
+        },
+      })
+      .then((response) => {
+        // alert(response.data[2]);
+        if (response.data[1] == 200) {
+          this.data = response.data[0];
+          console.log(this.data);
+          // alert(response.data[1]);
+          sessionStorage.setItem("jwt_token", response.data[2]);
+        }
+       
+      })
+      .catch((err) => {
+        console.log();
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
   },
+  methods: {},
 };
 </script>
 <style></style>
