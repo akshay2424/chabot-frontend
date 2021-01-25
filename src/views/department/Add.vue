@@ -31,7 +31,9 @@
             </div>
             <template>
               <form @submit.prevent>
-                <h6 class="heading-small text-muted mb-4">Department information</h6>
+                <h6 class="heading-small text-muted mb-4">
+                  Department information
+                </h6>
                 <div class="pl-lg-4">
                   <div class="row">
                     <div class="col-lg-6">
@@ -45,14 +47,14 @@
                       />
                     </div>
                     <div class="col-lg-6">
-                     <base-input alternative="" label="Description">
-                      <textarea
-                        rows="4"
-                        class="form-control form-control-alternative"
-                        placeholder="A few words about Department ..."
-                         v-model="model.description"
-                      ></textarea>
-                    </base-input>
+                      <base-input alternative="" label="Description">
+                        <textarea
+                          rows="4"
+                          class="form-control form-control-alternative"
+                          placeholder="A few words about Department ..."
+                          v-model="model.description"
+                        ></textarea>
+                      </base-input>
                     </div>
                   </div>
                 </div>
@@ -82,10 +84,10 @@ export default {
   data() {
     return {
       model: {
-       name:'',
-       description:'',
-       organization_id:process.env.VUE_APP_ORG_ID,
-       admin_id:process.env.VUE_APP_USER_ID,
+        name: "",
+        description: "",
+        organization_id: process.env.VUE_APP_ORG_ID,
+        admin_id: process.env.VUE_APP_USER_ID,
       },
     };
   },
@@ -93,32 +95,43 @@ export default {
     submit() {
       //we should handle errors in a more scalabe way, but this works for now
 
-    //  alert(process.env.VUE_APP_ORG_ID)
+      //  alert(process.env.VUE_APP_ORG_ID)
       axios
         .post("department", {
           headers: {
             // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
             "Content-Type": "application/json",
+            
+
           },
           body: {
             name: this.model.name,
             description: this.model.description,
-            organization_id:this.model.organization_id,
-            admin_id:this.model.admin_id,
-            is_active:true,
-            is_deleted:false
+            organization_id: this.model.organization_id,
+            admin_id: this.model.admin_id,
+            is_active: true,
+            is_deleted: false,
           },
         })
         .then((response) => {
           // alert(response.data);
           if (response.data[1] == 201) {
+            sessionStorage.setItem("jwt_token", response.data[2]);
+
             this.$router.push("/department/list");
           }
-         
+
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

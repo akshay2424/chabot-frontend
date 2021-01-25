@@ -195,7 +195,7 @@ export default {
   },
   data() {
     return {
-      email:'',
+      email: "",
       model: {
         username: "",
         email: "",
@@ -212,45 +212,51 @@ export default {
       },
     };
   },
-   mounted() {
-      //we should handle errors in a more scalabe way, but this works for now
+  mounted() {
+    //we should handle errors in a more scalabe way, but this works for now
 
     //   alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
-console.log(this.$route.params.agent_id+"asjkasj")
-      axios
-        .get("agent/"+this.$route.params.agent_id)
-        .then((response) => {
+    // console.log(this.$route.params.agent_id+"asjkasj")
+    axios
+      .get("agent/" + this.$route.params.agent_id)
+      .then((response) => {
         //   alert(response.data);
-          if (response.data[1] == 200) {
-            this.data=response.data[0];
-            console.log(this.data)
-            // const{email} = this.data
-            this.model.email = this.data.email
-            this.model.first_name = this.data.first_name
-            this.model.last_name = this.data.last_name
-            this.model.start_time = this.data.start_time
-            this.model.end_time = this.data.end_time
-            this.model.address = this.data.address
-            this.model.city = this.data.city
-            this.model.country = this.data.country
-            this.model.zipCode = this.data.pincode
-             this.model.about = this.data.description
-          }
+        if (response.data[1] == 200) {
+          this.data = response.data[0];
+          console.log(this.data);
+          // const{email} = this.data
+          this.model.email = this.data.email;
+          this.model.first_name = this.data.first_name;
+          this.model.last_name = this.data.last_name;
+          this.model.start_time = this.data.start_time;
+          this.model.end_time = this.data.end_time;
+          this.model.address = this.data.address;
+          this.model.city = this.data.city;
+          this.model.country = this.data.country;
+          this.model.zipCode = this.data.pincode;
+          this.model.about = this.data.description;
+        }
         //   console.log(response.data);
         //   console.log(response.status);
-          //handle response and save JWT
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
+        //handle response and save JWT
+      })
+      .catch((err) => {
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
+  },
   methods: {
     submit() {
       //we should handle errors in a more scalabe way, but this works for now
 
-     
       axios
-        .put("agent/"+this.$route.params.agent_id, {
+        .put("agent/" + this.$route.params.agent_id, {
           headers: {
             // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
             "Content-Type": "application/json",
@@ -271,6 +277,7 @@ console.log(this.$route.params.agent_id+"asjkasj")
         })
         .then((response) => {
           if (response.data[1] == 201) {
+            sessionStorage.setItem("jwt_token", response.data[2]);
             this.$router.push("/agent/list");
           }
           console.log(response.data[0].message);
@@ -278,7 +285,14 @@ console.log(this.$route.params.agent_id+"asjkasj")
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

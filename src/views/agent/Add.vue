@@ -240,13 +240,22 @@ export default {
           // alert(response.data);
           if (response.data[1] == 201) {
             this.$router.push("/agent/list");
+          sessionStorage.setItem("jwt_token", response.data[2]);
+
           }
           console.log(response.data[0].message);
           console.log(response.status);
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

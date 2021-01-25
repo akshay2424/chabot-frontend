@@ -24,7 +24,7 @@
                 </h6>
                 <div class="pl-lg-4">
                   <div class="row">
-                     <div class="col-lg-6">
+                    <div class="col-lg-6">
                       <base-input
                         alternative=""
                         label="Question"
@@ -73,8 +73,8 @@ export default {
     return {
       model: {
         answer: "",
-        question:this.$route.params.question_id ,
-         organization_id:process.env.VUE_APP_ORG_ID,
+        question: this.$route.params.question_id,
+        organization_id: process.env.VUE_APP_ORG_ID,
       },
     };
   },
@@ -85,6 +85,8 @@ export default {
           headers: {
             // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
             "Content-Type": "application/json",
+            
+            
           },
           body: {
             answer: this.model.answer,
@@ -97,13 +99,22 @@ export default {
         .then((response) => {
           // alert(response.data);
           if (response.data[1] == 201) {
-            this.$router.push("/answer/list",this.$route.params.question_id);
+            sessionStorage.setItem("jwt_token", response.data[2]);
+
+            this.$router.push("/answer/list", this.$route.params.question_id);
           }
 
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

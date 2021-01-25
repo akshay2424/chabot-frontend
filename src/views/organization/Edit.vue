@@ -171,6 +171,7 @@ export default {
         //   alert(response.data);
         if (response.data[1] == 200) {
           this.data = response.data[0];
+          sessionStorage.setItem("jwt_token", response.data[2]);
           console.log(this.data);
           // const{email} = this.data
           this.model.name = this.data.name;
@@ -186,7 +187,14 @@ export default {
         //handle response and save JWT
       })
       .catch((err) => {
-        alert(err);
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          console.log(err.response);
+          this.$router.push("/login");
+        }
       });
   },
   methods: {
@@ -213,6 +221,7 @@ export default {
         .then((response) => {
           alert(response.data);
           if (response.data[1] == 201) {
+          sessionStorage.setItem("jwt_token", response.data[2]);
             this.$router.push("/organization/list");
           }
           console.log(response.data[0].message);
@@ -220,7 +229,14 @@ export default {
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

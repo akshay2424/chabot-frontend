@@ -26,7 +26,7 @@
               <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg" />
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold">Jessica Jones</span>
+              <span class="mb-0 text-sm font-weight-bold">Akshay R</span>
             </div>
           </div>
 
@@ -99,7 +99,7 @@ export default {
           if (response.data[1] == 200) {
             console.log(sessionStorage.getItem("loggedIn"));
             sessionStorage.setItem("loggedIn", false);
-            sessionStorage.setItem("jwt_token", '');
+            sessionStorage.setItem("jwt_token", "");
             console.log(sessionStorage.getItem("loggedIn"));
             this.$router.push("/login");
           }
@@ -108,7 +108,15 @@ export default {
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            sessionStorage.setItem("jwt_token", "");
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

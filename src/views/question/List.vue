@@ -6,7 +6,7 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
-          <question-table title="Question List"  :data="data"></question-table>
+          <question-table title="Question List" :data="data"></question-table>
         </div>
       </div>
     </div>
@@ -22,31 +22,37 @@ export default {
     return {
       data: [],
       showError: false,
+       totalItems: 0,
+      currentPage:1
     };
   },
   components: {
     QuestionTable,
   },
   created() {
-      axios
-        .get("question")
-        .then((response) => {
+    axios
+      .get("question?_page="+this.currentPage)
+      .then((response) => {
         //   alert(response.data);
-          if (response.data[1] == 200) {
-            this.data=response.data[0];
-            console.log(this.data)
-          }
-        //   console.log(response.data);
-        //   console.log(response.status);
-          //handle response and save JWT
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
-  methods: {
-    
+        if (response.data[1] == 200) {
+          sessionStorage.setItem("jwt_token", response.data[2]);
+
+          this.data = response.data[0];
+          console.log(this.data);
+        }
+      })
+      .catch((err) => {
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
   },
+  methods: {},
 };
 </script>
 <style></style>

@@ -23,19 +23,19 @@ export default {
   props: {
     pageCount: {
       type: Number,
-      default: 0,
+      default: 6,
       description:
         "Pagination page count. This should be specified in combination with perPage"
     },
     perPage: {
       type: Number,
-      default: 10,
+      default: 2,
       description:
         "Pagination per page. Should be specified with total or pageCount"
     },
     total: {
       type: Number,
-      default: 0,
+      default: 2,
       description:
         "Can be specified instead of pageCount. The page count in this case will be total/perPage"
     },

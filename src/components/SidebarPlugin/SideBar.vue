@@ -96,7 +96,7 @@
           <slot name="links"> </slot>
         </ul>
         <!--Divider-->
-        <hr class="my-3" />
+        <hr class="my-1" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Organization</h6>
         <!--Navigation-->
@@ -117,7 +117,7 @@
           </li>
         </ul>
         <!--Divider-->
-        <hr class="my-3" />
+        <hr class="my-1" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Topic</h6>
         <!--Navigation-->
@@ -138,7 +138,7 @@
           </li>
         </ul>
         <!--Divider-->
-        <hr class="my-3" />
+        <hr class="my-1" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Question</h6>
         <!--Navigation-->
@@ -154,7 +154,7 @@
           </li>
         </ul>
         <!--Divider-->
-        <hr class="my-3" />
+        <hr class="my-1" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Agent</h6>
         <!--Navigation-->
@@ -175,7 +175,7 @@
           </li>
         </ul>
         <!--Divider-->
-        <hr class="my-3" />
+        <hr class="my-1" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Department</h6>
         <!--Navigation-->

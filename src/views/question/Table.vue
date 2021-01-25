@@ -25,8 +25,6 @@
         :thead-classes="type === 'dark' ? 'thead-dark' : 'thead-light'"
         tbody-classes="list"
         :data="data"
-        :per-page="perPage"
-        :current-page="currentPage"
       >
         <template slot="columns">
           <th>Question no</th>
@@ -53,11 +51,14 @@
             {{ row.topic_id }}
           </td>
           <td class="budget">
-            <a class="dropdown-item text-blue name mb-0 text-sm" href="#" @click="handleAnswer(row._id.$oid)">
+            <a
+              class="dropdown-item text-blue name mb-0 text-sm"
+              href="#"
+              @click="handleAnswer(row._id.$oid)"
+            >
               Answers
             </a>
           </td>
-          
         </template>
       </base-table>
     </div>
@@ -67,10 +68,9 @@
       :class="type === 'dark' ? 'bg-transparent' : ''"
     >
       <base-pagination
-        total="10"
         v-model="currentPage"
-        :total-rows="rows"
-        :per-page="perPage"
+        :pageCount="(totalItems + 10) / 10"
+        @input="getPostData(currentPage)"
       ></base-pagination>
     </div>
   </div>
@@ -86,6 +86,7 @@ export default {
     },
     title: String,
     data: Array,
+    totalItems: Number,
   },
   computed: {
     rows() {
@@ -97,31 +98,49 @@ export default {
       perPage: 10,
       id: "",
       currentPage: 1,
-      question_id:''
+      question_id: "",
     };
   },
   methods: {
-     handleAnswer(question_id){
-      //  console.log(agent_id)
-      this.$router.push({name:"answerList",params:{question_id:question_id}});
+    getPostData(currentPage) {
+      axios
+        .get("question?_page=" + currentPage)
+        .then((response) => {
+          console.log(response);
+          sessionStorage.setItem("jwt_token", response.data[2]);
+          this.data = response.data[0];
+        })
+        .catch((e) => {
+          this.errors.push(e);
+        });
+    },
+    handleAnswer(question_id) {
+      this.$router.push({
+        name: "answerList",
+        params: { question_id: question_id },
+      });
     },
     handleDelete(id) {
-      //  console.log(agent_id)
       axios
         .delete("question/" + id)
         .then((response) => {
           //   alert(response.data);
           if (response.data[1] == 204) {
             // this.data=response.data[0];
+          sessionStorage.setItem("jwt_token", response.data[2]);
             this.$router.back();
             console.log(this.data);
           }
-          //   console.log(response.data);
-          //   console.log(response.status);
-          //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
     },
   },

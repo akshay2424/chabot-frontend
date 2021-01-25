@@ -9,6 +9,7 @@
           <organization-table
             title="Organization List"
             :data="data"
+            :totalItems="totalItems"
           ></organization-table>
         </div>
       </div>
@@ -25,26 +26,23 @@ export default {
     return {
       data: [],
       showError: false,
+      totalItems: 0,
+      currentPage: 1,
     };
   },
   components: {
     OrganizationTable,
   },
   mounted() {
-    //we should handle errors in a more scalabe way, but this works for now
-
-    //   alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
-
+  
     axios
-      .get("organization", {
-        headers: {
-          // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
-          "x-access-token": sessionStorage.getItem("jwt_token"),
-        },
-      })
+      .get("organization?_page="+this.currentPage)
       .then((response) => {
         // alert(response.data[2]);
         if (response.data[1] == 200) {
+          sessionStorage.setItem("jwt_token", response.data[2]);
+
+
           this.data = response.data[0];
           console.log(this.data);
           // alert(response.data[1]);
@@ -57,7 +55,8 @@ export default {
         if (!err.response) {
           alert("Check your network");
         } else if (err.response.status == 302) {
-          sessionStorage.setItem("loggedIn", false);
+          sessionStorage.setItem("loggedIn", '');
+          sessionStorage.setItem("jwt_token", "");
           console.log(err.response);
           this.$router.push("/login");
         }

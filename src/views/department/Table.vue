@@ -25,8 +25,7 @@
         :thead-classes="type === 'dark' ? 'thead-dark' : 'thead-light'"
         tbody-classes="list"
         :data="data"
-        :per-page="perPage"
-        :current-page="currentPage"
+        
       >
         <template slot="columns">
           <th>Name</th>
@@ -41,16 +40,14 @@
                 <img alt="Image placeholder" :src="row.img">
               </a> -->
               <div class="media-body">
-                <span class="name mb-0 text-sm"
-                  >{{ row.name }}</span
-                >
+                <span class="name mb-0 text-sm">{{ row.name }}</span>
               </div>
             </div>
           </th>
           <td class="budget">
             {{ row.description }}
           </td>
-          
+
           <td class="text-right">
             <base-dropdown class="dropdown" position="right">
               <a
@@ -65,10 +62,19 @@
               </a>
 
               <template>
-                <a class="dropdown-item" href="#"  @click="handleEdit(row._id.$oid)">
-                Edit
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click="handleEdit(row._id.$oid)"
+                >
+                  Edit
                 </a>
-                <a class="dropdown-item" href="#" @click="handleDelete(row._id.$oid)">Delete</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click="handleDelete(row._id.$oid)"
+                  >Delete</a
+                >
                 <!-- <a class="dropdown-item" href="#">Something else here</a> -->
               </template>
             </base-dropdown>
@@ -82,10 +88,9 @@
       :class="type === 'dark' ? 'bg-transparent' : ''"
     >
       <base-pagination
-        total="10"
-        v-model="currentPage"
-        :total-rows="rows"
-        :per-page="perPage"
+         v-model="currentPage"
+        :pageCount="(totalItems + 10) / 10"
+        @input="getPostData(currentPage)"
       ></base-pagination>
     </div>
   </div>
@@ -101,6 +106,7 @@ export default {
     },
     title: String,
     data: Array,
+    totalItems: Number
   },
   computed: {
     rows() {
@@ -110,35 +116,60 @@ export default {
   data() {
     return {
       perPage: 10,
-      id:'',
+      id: "",
       currentPage: 1,
     };
   },
-  methods:{
-     handleEdit(id){
-      //  console.log(agent_id)
-      this.$router.push({name:"departmentEdit",params:{id:id}});
+  methods: {
+    getPostData(currentPage) {
+      // alert("ask")
+
+      axios
+        .get("department?_page=" + currentPage)
+        .then((response) => {
+          console.log(response);
+          sessionStorage.setItem("jwt_token", response.data[2]);
+          this.data = response.data[0];
+        })
+        .catch((e) => {
+          this.errors.push(e);
+        });
     },
-    handleDelete(id){
+    handleEdit(id) {
+      //  console.log(agent_id)
+      this.$router.push({ name: "departmentEdit", params: { id: id } });
+    },
+    handleDelete(id) {
       //  console.log(agent_id)
       axios
-        .delete("department/"+id)
+        .delete("department/" + id, {
+          headers: {},
+        })
         .then((response) => {
-        //   alert(response.data);
+          //   alert(response.data);
           if (response.data[1] == 204) {
             // this.data=response.data[0];
-            this.$router.back()
-            console.log(this.data)
+            sessionStorage.setItem("jwt_token", response.data[2]);
+
+            this.$router.back();
+            console.log(this.data);
           }
-        //   console.log(response.data);
-        //   console.log(response.status);
+          //   console.log(response.data);
+          //   console.log(response.status);
           //handle response and save JWT
         })
         .catch((err) => {
-          alert(err);
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

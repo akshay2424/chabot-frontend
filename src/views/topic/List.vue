@@ -6,7 +6,7 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
-          <topic-table title="Topic List"  :data="data"></topic-table>
+          <topic-table title="Topic List" :data="data" :totalItems="totalItems"></topic-table>
         </div>
       </div>
     </div>
@@ -22,31 +22,34 @@ export default {
     return {
       data: [],
       showError: false,
+      currentPage:1,
+      totalItems:0
     };
   },
   components: {
     TopicTable,
   },
   created() {
-      axios
-        .get("topic")
-        .then((response) => {
-        //   alert(response.data);
-          if (response.data[1] == 200) {
-            this.data=response.data[0];
-            console.log(this.data)
-          }
-        //   console.log(response.data);
-        //   console.log(response.status);
-          //handle response and save JWT
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
-  methods: {
-    
+    axios.get('topic?_page='+this.currentPage)
+      .then(response => {
+        sessionStorage.setItem("jwt_token", response.data[2]);
+
+          this.data = response.data[0];
+          this.totalItems=this.data.length
+      })
+      .catch((err) => {
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          sessionStorage.setItem("jwt_token", '');
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
   },
+  methods: {},
 };
 </script>
 <style></style>
