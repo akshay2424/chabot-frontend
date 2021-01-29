@@ -219,7 +219,7 @@ export default {
           },
         })
         .then((response) => {
-          alert(response.data);
+          // alert(response.data);
           if (response.data[1] == 201) {
           sessionStorage.setItem("jwt_token", response.data[2]);
             this.$router.push("/organization/list");

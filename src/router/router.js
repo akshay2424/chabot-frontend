@@ -34,7 +34,7 @@ const routes = [
       },
       {
         path: '/organization/list',
-        name: 'organizationList',
+        name: 'organization-list',
         component: () => import(/* webpackChunkName: "demo" */ '@/views/organization/List.vue'),
         meta: {
           middleware: [
@@ -44,7 +44,7 @@ const routes = [
       },
       {
         path: '/organization/create',
-        name: 'organizationCreate',
+        name: 'organization-create',
         meta: {
           middleware: [
             auth
@@ -54,7 +54,7 @@ const routes = [
       },
       {
         path: '/organization/edit',
-        name: 'organizationEdit',
+        name: 'organization-edit',
         meta: {
           middleware: [
             auth
@@ -64,7 +64,7 @@ const routes = [
       },
       {
         path: '/topic/list',
-        name: 'organizationList',
+        name: 'organization-list',
         meta: {
           middleware: [
             auth
@@ -74,7 +74,7 @@ const routes = [
       },
       {
         path: '/topic/create',
-        name: 'topicCreate',
+        name: 'topic-create',
         meta: {
           middleware: [
             auth
@@ -84,7 +84,7 @@ const routes = [
       },
       {
         path: '/topic/edit',
-        name: 'topicEdit',
+        name: 'topic-edit',
         meta: {
           middleware: [
             auth
@@ -94,7 +94,7 @@ const routes = [
       },
       {
         path: '/question/list',
-        name: 'questionList',
+        name: 'question-list',
         meta: {
           middleware: [
             auth
@@ -104,7 +104,7 @@ const routes = [
       },
       {
         path: '/answer/list',
-        name: 'answerList',
+        name: 'answer-list',
         meta: {
           middleware: [
             auth
@@ -114,7 +114,7 @@ const routes = [
       },
       {
         path: '/answer/create',
-        name: 'answerCreate',
+        name: 'answer-create',
         meta: {
           middleware: [
             auth
@@ -124,7 +124,7 @@ const routes = [
       },
       {
         path: '/agent/list',
-        name: 'agentList',
+        name: 'agent-list',
         meta: {
           middleware: [
             auth
@@ -134,7 +134,7 @@ const routes = [
       },
       {
         path: '/agent/create',
-        name: 'agentCreate',
+        name: 'agent-create',
         meta: {
           middleware: [
             auth
@@ -144,7 +144,7 @@ const routes = [
       },
       {
         path: '/department/list',
-        name: 'departmentList',
+        name: 'department-list',
         meta: {
           middleware: [
             auth
@@ -154,7 +154,7 @@ const routes = [
       },
       {
         path: '/department/create',
-        name: 'departmentCreate',
+        name: 'department-create',
         meta: {
           middleware: [
             auth
@@ -164,7 +164,7 @@ const routes = [
       },
       {
         path: '/department/edit',
-        name: 'departmentEdit',
+        name: 'department-edit',
         meta: {
           middleware: [
             auth
@@ -172,7 +172,16 @@ const routes = [
         },
         component: () => import(/* webpackChunkName: "demo" */ '@/views/department/Edit.vue')
       },
-
+      {
+        path: '/conversation',
+        name: 'chat-conversation',
+        component: () => import(/* webpackChunkName: "demo" */ '@/views/Conversation.vue'),
+        meta: {
+          middleware: [
+            auth
+          ]
+        },
+      },
       {
         path: '/agent/edit',
         name: 'agentEdit',

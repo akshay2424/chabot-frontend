@@ -137,7 +137,7 @@ export default {
     },
     handleEdit(id) {
       //  console.log(agent_id)
-      this.$router.push({ name: "departmentEdit", params: { id: id } });
+      this.$router.push({ name: "department-edit", params: { id: id } });
     },
     handleDelete(id) {
       //  console.log(agent_id)

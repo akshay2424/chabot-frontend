@@ -175,6 +175,11 @@
           </li>
         </ul>
         <!--Divider-->
+        <!-- <hr class="my-1" /> -->
+        <!--Heading-->
+               <!-- <sidebar-item :link="{name: 'Conversation', icon: 'ni ni-chat-round text-blue', path: '/icons'}"/> -->
+
+        <!--Divider-->
         <hr class="my-1" />
         <!--Heading-->
         <h6 class="navbar-heading text-muted">Department</h6>
@@ -216,7 +221,7 @@ export default {
   props: {
     logo: {
       type: String,
-      default: "img/brand/grween.png",
+      default: "img/brand/white1.png",
       description: "Sidebar app logo",
     },
     autoClose: {

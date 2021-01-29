@@ -138,7 +138,7 @@ export default {
 
     handleEdit(id) {
       //  console.log(agent_id)
-      this.$router.push({ name: "topicEdit", params: { id: id } });
+      this.$router.push({ name: "topic-edit", params: { id: id } });
     },
     handleDelete(id) {
       //  console.log(agent_id)
