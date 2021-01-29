@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="table">
       <base-table
         class="table align-items-center table-flush"
         :class="type === 'dark' ? 'table-dark' : ''"

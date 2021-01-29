@@ -230,6 +230,7 @@ export default {
           this.model.last_name = this.data.last_name;
           this.model.start_time = this.data.start_time;
           this.model.end_time = this.data.end_time;
+          this.model.shift_name = this.data.shift_name;
           this.model.address = this.data.address;
           this.model.city = this.data.city;
           this.model.country = this.data.country;
@@ -271,7 +272,7 @@ export default {
             pincode: this.model.zipCode,
             shift_name: this.model.shift_name,
             start_time: this.model.start_time,
-            end_time: this.model.start_time,
+            end_time: this.model.end_time,
             description: this.model.about,
           },
         })

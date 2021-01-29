@@ -64,7 +64,7 @@ const routes = [
       },
       {
         path: '/topic/list',
-        name: 'organization-list',
+        name: 'topic-list',
         meta: {
           middleware: [
             auth

@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="table">
       <base-table thead-classes="thead-light"
                   :data="tableData">
         <template slot="columns">
