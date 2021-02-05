@@ -10,7 +10,9 @@
         :loading-rooms="loadingRooms"
         :messages-loaded="messagesLoaded"
         :rooms-loaded="loadedRooms"
+        @fetch-more-rooms="fetchMoreRooms"
         @fetch-messages="fetchMessages"
+        @send-message="sendMessage"
       />
     </div>
   </div>
@@ -19,6 +21,7 @@
 <script>
 import ChatWindow from "vue-advanced-chat";
 import "vue-advanced-chat/dist/vue-advanced-chat.css";
+import axios from "axios";
 
 export default {
   components: {
@@ -29,212 +32,167 @@ export default {
       loadingRooms: false,
       messagesLoaded: true,
       loadedRooms: true,
-      rooms: [
-        {
-          roomId: 1,
-          roomName: "User 1",
-          avatar: "https://i.picsum.photos/id/1/5616/3744.jpg?hmac=kKHwwU8s46oNettHKwJ24qOlIAsWN9d2TtsXDoCWWsQ",
-          unreadCount: 0,
-          index: 3,
-          lastMessage: {
-            content: "Very beautiful",
-            sender_id: 1234,
-            username: "John Doe",
-            timestamp: "10:20",
-            saved: true,
-            distributed: true,
-            seen: true,
-            new: true,
-          },
-          users: [
-            {
-              _id: 1234,
-              username: "John Doe",
-              avatar: "assets/imgs/doe.png",
-              status: {
-                state: "online",
-                last_changed: "today, 14:30",
-              },
-            },
-            {
-              _id: 4321,
-              username: "John Snow",
-              avatar: "assets/imgs/snow.png",
-              status: {
-                state: "offline",
-                last_changed: "14 July, 20:00",
-              },
-            },
-          ],
-          typingUsers: [4321],
-        },
-        {
-          roomId: 2,
-          roomName: "User 2",
-          avatar: "https://i.picsum.photos/id/1005/5760/3840.jpg?hmac=2acSJCOwz9q_dKtDZdSB-OIK1HUcwBeXco_RMMTUgfY",
-          unreadCount: 0,
-          index: 3,
-          lastMessage: {
-            content: "fine!",
-            sender_id: 1234,
-            username: "John Doe",
-            timestamp: "10:20",
-            saved: true,
-            distributed: true,
-            seen: true,
-            new: true,
-          },
-          users: [
-            {
-              _id: 1234,
-              username: "John Doe",
-              avatar: "assets/imgs/doe.png",
-              status: {
-                state: "online",
-                last_changed: "today, 14:30",
-              },
-            },
-            {
-              _id: 4321,
-              username: "John Snow",
-              avatar: "assets/imgs/snow.png",
-              status: {
-                state: "offline",
-                last_changed: "14 July, 20:00",
-              },
-            },
-          ],
-          typingUsers: [4321],
-        },
-      ],
-      
-      
+      startMessages: null,
+      endMessages: null,
+      rooms: [],
       currentUserId: 1234,
+      organization_id: process.env.VUE_APP_ORG_ID,
     };
   },
+  mounted() {
+    this.fetchRooms();
+    // this.updateUserOnlineStatus()
+  },
   methods: {
-    fetchMessages({ room, options }) {
+    resetRooms() {
+      this.loadingRooms = true;
+      this.loadingLastMessageByRoom = 0;
+      this.roomsLoadedCount = 0;
+      this.rooms = [];
+      this.roomsLoaded = true;
+      this.startRooms = null;
+      this.endRooms = null;
+      this.resetMessages();
+    },
+    resetMessages() {
+      this.messages = [];
       this.messagesLoaded = false;
-      console.log(room);
-      console.log(options);
-      if (room.roomId == 2) {
-        this.messages = [
-          {
-            _id: 7890,
-            content: "Hie",
-            room_id: 2,
-            sender_id: 1234,
-            username: "John Doe",
-            date: "13 November",
-            timestamp: "10:20",
-            system: false,
-            saved: true,
-            distributed: true,
-            seen: true,
-            disable_actions: false,
-            disable_reactions: false,
-          },
-           {
-            _id: 7892,
-            content: "Hie",
-            room_id: 2,
-            sender_id: 12345,
-            username: "John Doe",
-            date: "13 November",
-            timestamp: "10:20",
-            system: false,
-            saved: true,
-            distributed: true,
-            seen: true,
-            disable_actions: false,
-            disable_reactions: false,
-          },
-          {
-            _id: 7893,
-            content: "How are you?",
-            room_id: 2,
-            sender_id: 1234,
-            username: "John Doe",
-            date: "13 November",
-            timestamp: "10:20",
-            system: false,
-            saved: true,
-            distributed: true,
-            seen: true,
-            disable_actions: false,
-            disable_reactions: false,
-          },
-          {
-            _id: 7894,
-            content: "fine!",
-            room_id: 2,
-            sender_id: 12345,
-            username: "John Doe",
-            date: "13 November",
-            timestamp: "10:20",
-            system: false,
-            saved: true,
-            distributed: true,
-            seen: true,
-            disable_actions: false,
-            disable_reactions: false,
-          },
-        ];
-      } else {
-        this.messages = [
-          {
-            _id: 7891,
-            content: "message 1",
-            room_id: 1,
-            sender_id: 1235,
-            username: "John Doe",
-            date: "13 November",
-            timestamp: "10:20",
-            system: false,
-            saved: true,
-            distributed: true,
-            seen: true,
-            disable_actions: false,
-            disable_reactions: false,
-            file: {
-              name: "My File",
-              size: 67351,
-              type: "png",
-              audio: true,
-              duration: 14.4,
-              url: "https://placekitten.com/200/300",
-            },
-            reactions: {
-              wink: [
-                1234, // USER_ID
-                4321,
-              ],
-              laughing: [1234],
-            },
-          },
-          {
-            _id: 7890,
-            content: "Very beautiful",
-            room_id: 2,
-            sender_id: 1234,
-            username: "John Doe",
-            date: "13 November",
-            timestamp: "10:20",
-            system: false,
-            saved: true,
-            distributed: true,
-            seen: true,
-            disable_actions: false,
-            disable_reactions: false,
-          },
-          
-        ];
-      }
-
+      this.startMessages = null;
+      this.endMessages = null;
+      this.listeners.forEach((listener) => listener());
+      this.listeners = [];
+    },
+    fetchRooms() {
+      // this.resetRooms();
+      this.fetchMoreRooms();
+    },
+    async fetchMoreRooms() {
+      axios
+        .get("visitor?_page=" + 1)
+        .then((response) => {
+          sessionStorage.setItem("jwt_token", response.data[2]);
+          this.rooms = response.data[0];
+          console.log("room;-" + this.rooms);
+          // this.fetchMessages(this.rooms[0]);
+        })
+        .catch((err) => {
+          // alert(err);
+          if (!err.response) {
+            alert(err);
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            sessionStorage.setItem("jwt_token", "");
+            console.log(err.response);
+            this.$router.push("/login");
+          }
+        });
+    },
+    fetchMessages({ room }) {
+      // console.log(room);
+      console.log("room2:-" + room.roomId);
+      // console.log(options);
+      this.getMessagesFromApi(room.roomId);
       // use timeout to imitate async server fetched data
       setTimeout(() => {
         this.messagesLoaded = true;
       }, 0);
+    },
+
+    getMessagesFromApi(roomId) {
+      let room_id = roomId;
+      axios
+        .get("messages/" + room_id + "?_page=" + 1)
+        .then((response) => {
+          // alert("akshay" + room.roomId);
+          sessionStorage.setItem("jwt_token", response.data[2]);
+          this.messagesLoaded = false;
+          this.messages = response.data[0];
+          console.log(this.messages);
+        })
+        .catch((err) => {
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            sessionStorage.setItem("jwt_token", "");
+            console.log(err.response);
+            this.$router.push("/login");
+          }
+        });
+    },
+
+    async sendMessage({ content, roomId, file, replyMessage }) {
+      const message = {
+        sender_id: this.currentUserId,
+        content,
+        room_id: roomId,
+        timestamp: new Date(),
+      };
+      console.log("Message:-" + message.sender_id);
+      console.log("content:-" + content);
+      console.log("roomId:-" + roomId);
+      console.log("file:-" + file);
+      console.log("replyMessage:-" + replyMessage);
+
+      // if (file) {
+      //   message.file = {
+      //     name: file.name,
+      //     size: file.size,
+      //     type: file.type,
+      //     extension: file.extension || file.type,
+      //     url: file.localUrl,
+      //   };
+      //   if (file.audio) {
+      //     message.file.audio = true;
+      //     message.file.duration = file.duration;
+      //   }
+      // }
+
+      // if (replyMessage) {
+      //   message.replyMessage = {
+      //     _id: replyMessage._id,
+      //     content: replyMessage.content,
+      //     sender_id: replyMessage.sender_id,
+      //   };
+
+      //   if (replyMessage.file) {
+      //     message.replyMessage.file = replyMessage.file;
+      //   }
+      // }
+
+      // const { id } = await messagesRef(roomId).add(message);
+      // call api to save message
+      axios
+        .post("messages", {
+          body: {
+            sender_id: message.sender_id,
+            content: message.content,
+            organization_id: this.organization_id,
+            room_id: message.room_id,
+            timestamp: message.timestamp,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.messagesLoaded = true;
+          this.getMessagesFromApi(message.room_id)
+          //handle response and save JWT
+        })
+        .catch((err) => {
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            console.log(err.response);
+            this.$router.push("/login");
+          }
+        });
+
+      // if (file) this.uploadFile({ file, messageId: id, roomId });
+
+      // roomsRef.doc(roomId).update({ lastUpdated: new Date() });
     },
   },
 };

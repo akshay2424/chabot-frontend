@@ -1,20 +1,7 @@
 <template>
   <div>
     <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
-      <!-- Mask -->
-      <!-- <span class="mask bg-gradient-success opacity-8"></span> -->
-      <!-- Header container -->
-      <!-- <div class="container-fluid d-flex align-items-center">
-                <div class="row">
-                    <div class="col-lg-7 col-md-10">
-                        <h1 class="display-2 text-white">Hello Jesse</h1>
-                        <p class="text-white mt-0 mb-5">This is your profile page. You can see the progress you've made with your work and manage your projects or assigned tasks</p>
-                        <a href="#!" class="btn btn-info">Edit profile</a>
-                    </div>
-                </div>
-            </div> -->
     </base-header>
-
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
@@ -69,10 +56,41 @@
                   </div>
                 </div>
                 <hr class="my-4" />
+                <h6 class="heading-small text-muted mb-4">
+                  Agent Department And Group
+                </h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <base-input alternative="" label="Select Department">
+                        <b-select
+                          alternative=""
+                          class="form-control-alternative"
+                          v-model="selected_department"
+                          :options="department_options"
+                          @input="getGroupList(selected_department)"
+                          >Select Department</b-select
+                        >
+                      </base-input>
+                    </div>
+                    <div class="col-md-6">
+                      <base-input alternative="" label="Select Group">
+                        <b-select
+                          alternative=""
+                          class="form-control-alternative"
+                          v-model="selected_group"
+                          :options="group_options"
+                          >Select Group</b-select
+                        >
+                      </base-input>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4" />
                 <h6 class="heading-small text-muted mb-4">Agent Shift</h6>
                 <div class="pl-lg-4">
                   <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                       <base-input
                         alternative=""
                         label="Shift Name"
@@ -192,6 +210,10 @@ export default {
   name: "add-agent",
   data() {
     return {
+      department_options:[],
+      group_options:[],
+      selected_department:null,
+      selected_group:null,
       model: {
         username: "",
         email: "",
@@ -205,28 +227,56 @@ export default {
         shift_name: "",
         start_time: "",
         end_time: "",
+        organization_id: process.env.VUE_APP_ORG_ID,
       },
     };
   },
   methods: {
+    getGroupList(selected_department){
+      console.log(selected_department)
+      axios
+      .get("group/" + selected_department)
+      .then((response) => {
+        sessionStorage.setItem("jwt_token", response.data[2]);
+        this.group_options = response.data[0];
+      })
+      .catch((err) => {
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          sessionStorage.setItem("jwt_token", "");
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
+
+    },
+     getTextofGroup(){
+      var values = this.group_options.map(function(o) { return o.value })
+      var index = values.indexOf(this.selected_group);
+      let choiceText = this.group_options[index].text;
+      return choiceText;
+    },
+     getTextofDepartment(){
+      var values = this.department_options.map(function(o) { return o.value })
+      var index = values.indexOf(this.selected_department);
+      let choiceText = this.department_options[index].text;
+      return choiceText;
+    },
     submit() {
-      //we should handle errors in a more scalabe way, but this works for now
-
-      // alert(
-      //   this.model.email + " " + this.model.first_name + " " + this.rememberMe
-      // );
-
+      var text_group=this.getTextofGroup();
+      var text_department =this.getTextofDepartment();
       axios
         .post("agent", {
-          headers: {
-            // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
-            "Content-Type": "application/json",
-          },
           body: {
             email: this.model.email,
             first_name: this.model.first_name,
             last_name: this.model.last_name,
             address: this.model.address,
+            group:[this.selected_group,text_group],
+            department:[this.selected_department,text_department],
             city: this.model.city,
             country: this.model.country,
             pincode: this.model.zipCode,
@@ -240,8 +290,7 @@ export default {
           // alert(response.data);
           if (response.data[1] == 201) {
             this.$router.push("/agent/list");
-          sessionStorage.setItem("jwt_token", response.data[2]);
-
+            sessionStorage.setItem("jwt_token", response.data[2]);
           }
           console.log(response.data[0].message);
           console.log(response.status);
@@ -258,6 +307,27 @@ export default {
           }
         });
     },
+  },
+  mounted() {
+    axios
+      .get("department/" + this.model.organization_id)
+      .then((response) => {
+        sessionStorage.setItem("jwt_token", response.data[2]);
+        this.department_options = response.data[0];
+        this.selected_department=this.department_options[0].value;
+        // console.log(this.selected_department)
+      })
+      .catch((err) => {
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          sessionStorage.setItem("jwt_token", "");
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
   },
 };
 </script>

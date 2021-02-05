@@ -69,6 +69,37 @@
                   </div>
                 </div>
                 <hr class="my-4" />
+                <h6 class="heading-small text-muted mb-4">
+                  Agent Department And Group
+                </h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <base-input alternative="" label="Select Department">
+                        <b-select
+                          alternative=""
+                          class="form-control-alternative"
+                          v-model="selected_department"
+                          :options="department_options"
+                          @input="getGroupList(selected_department)"
+                          >Select Department</b-select
+                        >
+                      </base-input>
+                    </div>
+                    <div class="col-md-6">
+                      <base-input alternative="" label="Select Group">
+                        <b-select
+                          alternative=""
+                          class="form-control-alternative"
+                          v-model="selected_group"
+                          :options="group_options"
+                          >Select Group</b-select
+                        >
+                      </base-input>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4" />
                 <h6 class="heading-small text-muted mb-4">Agent Shift</h6>
                 <div class="pl-lg-4">
                   <div class="row">
@@ -195,7 +226,10 @@ export default {
   },
   data() {
     return {
-      email: "",
+      selected_department: null,
+      selected_group: null,
+      department_options: [],
+      group_options: [],
       model: {
         username: "",
         email: "",
@@ -209,22 +243,20 @@ export default {
         shift_name: "",
         start_time: "",
         end_time: "",
+        organization_id: process.env.VUE_APP_ORG_ID,
       },
     };
   },
   mounted() {
-    //we should handle errors in a more scalabe way, but this works for now
-
-    //   alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
-    // console.log(this.$route.params.agent_id+"asjkasj")
     axios
       .get("agent/" + this.$route.params.agent_id)
       .then((response) => {
         //   alert(response.data);
         if (response.data[1] == 200) {
           this.data = response.data[0];
-          console.log(this.data);
+          // console.log(this.data.group[1]);
           // const{email} = this.data
+
           this.model.email = this.data.email;
           this.model.first_name = this.data.first_name;
           this.model.last_name = this.data.last_name;
@@ -236,9 +268,9 @@ export default {
           this.model.country = this.data.country;
           this.model.zipCode = this.data.pincode;
           this.model.about = this.data.description;
+          this.selected_group = this.data.group[0];
+          this.selected_department = this.data.department[0];
         }
-        //   console.log(response.data);
-        //   console.log(response.status);
         //handle response and save JWT
       })
       .catch((err) => {
@@ -251,22 +283,72 @@ export default {
           this.$router.push("/login");
         }
       });
+    axios
+      .get("department/" + this.model.organization_id)
+      .then((response) => {
+        sessionStorage.setItem("jwt_token", response.data[2]);
+        this.department_options = response.data[0];
+        // this.selected_department=this.department_options[0].value;
+        // console.log(this.selected_department)
+      })
+      .catch((err) => {
+        // alert(err);
+        if (!err.response) {
+          alert("Check your network");
+        } else if (err.response.status == 302) {
+          sessionStorage.setItem("loggedIn", false);
+          sessionStorage.setItem("jwt_token", "");
+          console.log(err.response);
+          this.$router.push("/login");
+        }
+      });
   },
   methods: {
+    getGroupList(selected_department) {
+      console.log(selected_department);
+      axios
+        .get("group/" + selected_department)
+        .then((response) => {
+          sessionStorage.setItem("jwt_token", response.data[2]);
+          this.group_options = response.data[0];
+        })
+        .catch((err) => {
+          // alert(err);
+          if (!err.response) {
+            alert("Check your network");
+          } else if (err.response.status == 302) {
+            sessionStorage.setItem("loggedIn", false);
+            sessionStorage.setItem("jwt_token", "");
+            console.log(err.response);
+            this.$router.push("/login");
+          }
+        });
+    },
+     getTextofGroup(){
+      var values = this.group_options.map(function(o) { return o.value })
+      var index = values.indexOf(this.selected_group);
+      let choiceText = this.group_options[index].text;
+      return choiceText;
+    },
+     getTextofDepartment(){
+      var values = this.department_options.map(function(o) { return o.value })
+      var index = values.indexOf(this.selected_department);
+      let choiceText = this.department_options[index].text;
+      return choiceText;
+    },
     submit() {
       //we should handle errors in a more scalabe way, but this works for now
-
+      var text_group = this.getTextofGroup();
+      var text_department = this.getTextofDepartment();
       axios
         .put("agent/" + this.$route.params.agent_id, {
-          headers: {
-            // axios.defaults.headers.common['Access-Control-Allow-Origin'] :  '*'
-            "Content-Type": "application/json",
-          },
           body: {
             email: this.model.email,
             first_name: this.model.first_name,
             last_name: this.model.last_name,
             address: this.model.address,
+            group: [this.selected_group, text_group],
+            department: [this.selected_department, text_department],
             city: this.model.city,
             country: this.model.country,
             pincode: this.model.zipCode,

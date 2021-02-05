@@ -63,6 +63,36 @@ const routes = [
         component: () => import(/* webpackChunkName: "demo" */ '@/views/organization/Edit.vue')
       },
       {
+        path: '/group/list',
+        name: 'group-list',
+        meta: {
+          middleware: [
+            auth
+          ]
+        },
+        component: () => import(/* webpackChunkName: "demo" */ '@/views/group/List.vue')
+      },
+      {
+        path: '/group/create',
+        name: 'group-create',
+        meta: {
+          middleware: [
+            auth
+          ]
+        },
+        component: () => import(/* webpackChunkName: "demo" */ '@/views/group/Add.vue')
+      },
+      {
+        path: '/group/edit',
+        name: 'group-edit',
+        meta: {
+          middleware: [
+            auth
+          ]
+        },
+        component: () => import(/* webpackChunkName: "demo" */ '@/views/group/Edit.vue')
+      },
+      {
         path: '/topic/list',
         name: 'topic-list',
         meta: {

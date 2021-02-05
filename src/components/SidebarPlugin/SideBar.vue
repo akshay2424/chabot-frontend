@@ -102,10 +102,6 @@
         <!--Navigation-->
         <ul class="navbar-nav mb-md-3">
           <li class="nav-item">
-            <!-- <a class="nav-link"
-                           href="agent">
-                            <i class="ni ni-bullet-list-67 text-red"></i> List
-                        </a> -->
             <router-link to="/organization/list" class="nav-link">
               <i class="ni ni-bullet-list-67 text-red"></i> List
             </router-link>
@@ -119,14 +115,61 @@
         <!--Divider-->
         <hr class="my-1" />
         <!--Heading-->
+        <h6 class="navbar-heading text-muted">Department</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <router-link to="/department/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/department/create" class="nav-link">
+              <i class="ni ni-fat-add text-blue"></i> Add
+            </router-link>
+          </li>
+        </ul>
+         <!--Divider-->
+        <hr class="my-1" />
+        <!--Heading-->
+        <h6 class="navbar-heading text-muted">Group</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <router-link to="/group/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/group/create" class="nav-link">
+              <i class="ni ni-fat-add text-blue"></i> Add
+            </router-link>
+          </li>
+        </ul>
+         <!--Divider-->
+        <hr class="my-1" />
+        <!--Heading-->
+        <h6 class="navbar-heading text-muted">Agent</h6>
+        <!--Navigation-->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <router-link to="/agent/list" class="nav-link">
+              <i class="ni ni-bullet-list-67 text-red"></i> List
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/agent/create" class="nav-link">
+              <i class="ni ni-fat-add text-blue"></i> Add
+            </router-link>
+          </li>
+        </ul>
+        <!--Divider-->
+        <hr class="my-1" />
+        <!--Heading-->
         <h6 class="navbar-heading text-muted">Topic</h6>
         <!--Navigation-->
         <ul class="navbar-nav mb-md-3">
           <li class="nav-item">
-            <!-- <a class="nav-link"
-                           href="agent">
-                            <i class="ni ni-bullet-list-67 text-red"></i> List
-                        </a> -->
             <router-link to="/topic/list" class="nav-link">
               <i class="ni ni-bullet-list-67 text-red"></i> List
             </router-link>
@@ -144,68 +187,12 @@
         <!--Navigation-->
         <ul class="navbar-nav mb-md-3">
           <li class="nav-item">
-            <!-- <a class="nav-link"
-                           href="agent">
-                            <i class="ni ni-bullet-list-67 text-red"></i> List
-                        </a> -->
             <router-link to="/question/list" class="nav-link">
               <i class="ni ni-bullet-list-67 text-red"></i> List
             </router-link>
           </li>
         </ul>
-        <!--Divider-->
-        <hr class="my-1" />
-        <!--Heading-->
-        <h6 class="navbar-heading text-muted">Agent</h6>
-        <!--Navigation-->
-        <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <!-- <a class="nav-link"
-                           href="agent">
-                            <i class="ni ni-bullet-list-67 text-red"></i> List
-                        </a> -->
-            <router-link to="/agent/list" class="nav-link">
-              <i class="ni ni-bullet-list-67 text-red"></i> List
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/agent/create" class="nav-link">
-              <i class="ni ni-fat-add text-blue"></i> Add
-            </router-link>
-          </li>
-        </ul>
-        <!--Divider-->
-        <!-- <hr class="my-1" /> -->
-        <!--Heading-->
-               <!-- <sidebar-item :link="{name: 'Conversation', icon: 'ni ni-chat-round text-blue', path: '/icons'}"/> -->
-
-        <!--Divider-->
-        <hr class="my-1" />
-        <!--Heading-->
-        <h6 class="navbar-heading text-muted">Department</h6>
-        <!--Navigation-->
-        <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <!-- <a class="nav-link"
-                           href="agent">
-                            <i class="ni ni-bullet-list-67 text-red"></i> List
-                        </a> -->
-            <router-link to="/department/list" class="nav-link">
-              <i class="ni ni-bullet-list-67 text-red"></i> List
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/department/create" class="nav-link">
-              <i class="ni ni-fat-add text-blue"></i> Add
-            </router-link>
-          </li>
-          <!-- <li class="nav-item">
-                        <a class="nav-link"
-                           href="https://demos.creative-tim.com/vue-argon-dashboard/documentation/components/alerts.html">
-                            <i class="ni ni-ui-04"></i> Components
-                        </a>
-                    </li> -->
-        </ul>
+       
       </div>
     </div>
   </nav>

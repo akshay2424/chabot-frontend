@@ -11,8 +11,8 @@
           </h3>
         </div>
         <div class="col text-right">
-          <router-link to="/agent/create" class="nav-link">
-            <base-button type="primary" size="md">Add Agent</base-button>
+          <router-link to="/group/create" class="nav-link">
+            <base-button type="primary" size="md">Add Group</base-button>
           </router-link>
         </div>
       </div>
@@ -28,11 +28,8 @@
       >
         <template slot="columns">
           <th>Name</th>
-          <th>Email</th>
-          <th>Shift Name</th>
-          <th>Group Name</th>
-          <th>Department Name</th>
-          <th>Address</th>
+           <th>Department Name</th>
+          <th>Description</th>
           <th></th>
         </template>
 
@@ -43,35 +40,15 @@
                 <img alt="Image placeholder" :src="row.img">
               </a> -->
               <div class="media-body">
-                <span class="name mb-0 text-sm"
-                  >{{ row.first_name }} {{ row.last_name }}</span
-                >
+                <span class="name mb-0 text-sm">{{ row.name }}</span>
               </div>
             </div>
           </th>
-          <td class="budget">
-            {{ row.email }}
-          </td>
-          <td>
-            <badge class="badge-dot mr-4">
-              <i></i>
-              <span class="status">{{ row.shift_name }}</span>
-            </badge>
-          </td>
-          <td>
-            <badge class="badge-dot mr-4">
-              <i></i>
-              <span class="status">{{ row.group[1] }}</span>
-            </badge>
-          </td>
-           <td>
-            <badge class="badge-dot mr-4">
-              <i></i>
-              <span class="status">{{ row.department[1] }}</span>
-            </badge>
+           <td class="budget">
+            {{ row.department[1] }}
           </td>
           <td class="budget">
-            {{ row.address }}
+            {{ row.description }}
           </td>
           <td class="text-right">
             <base-dropdown class="dropdown" position="right">
@@ -113,8 +90,9 @@
       :class="type === 'dark' ? 'bg-transparent' : ''"
     >
       <base-pagination
+        size="md"
         v-model="currentPage"
-        :pageCount="(totalItems + 10) / 10"
+        :pageCount="(totalItems+10)/10"
         @input="getPostData(currentPage)"
       ></base-pagination>
     </div>
@@ -124,14 +102,14 @@
 import axios from "axios";
 
 export default {
-  name: "agent-table",
+  name: "group-table",
   props: {
     type: {
       type: String,
     },
     title: String,
     data: Array,
-    totalItems: Number,
+    totalItems: Number
   },
   computed: {
     rows() {
@@ -141,28 +119,44 @@ export default {
   data() {
     return {
       perPage: 10,
-      agent_id: "",
+      id: "",
       currentPage: 1,
     };
   },
   methods: {
-    handleEdit(agent_id) {
-      //  console.log(agent_id)
-      this.$router.push({ name: "agentEdit", params: { agent_id: agent_id } });
+    getPostData(currentPage) {
+      // alert("ask")
+
+      axios
+        .get("group?_page=" + currentPage)
+        .then((response) => {
+          console.log(response);
+          sessionStorage.setItem("jwt_token", response.data[2]);
+          this.data = response.data[0];
+        })
+        .catch((e) => {
+          this.errors.push(e);
+        });
     },
-    handleDelete(agent_id) {
+
+    handleEdit(id) {
+      //  console.log(agent_id)
+      this.$router.push({ name: "group-edit", params: { id: id } });
+    },
+    handleDelete(id) {
       //  console.log(agent_id)
       axios
-        .delete("agent/" + agent_id)
+        .delete("group/" + id)
         .then((response) => {
           //   alert(response.data);
           if (response.data[1] == 204) {
             // this.data=response.data[0];
-            window.location.href = "agent/list";
             sessionStorage.setItem("jwt_token", response.data[2]);
 
-            console.log(this.data);
+            this.$router.back();
+            console.log(response.data[2]);
           }
+          //handle response and save JWT
         })
         .catch((err) => {
           // alert(err);
@@ -173,18 +167,6 @@ export default {
             console.log(err.response);
             this.$router.push("/login");
           }
-        });
-    },
-    getPostData(currentPage) {
-      axios
-        .get("agent?_page=" + currentPage)
-        .then((response) => {
-          console.log(response);
-          sessionStorage.setItem("jwt_token", response.data[2]);
-          this.data = response.data[0];
-        })
-        .catch((e) => {
-          this.errors.push(e);
         });
     },
   },

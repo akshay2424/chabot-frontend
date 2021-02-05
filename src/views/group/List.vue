@@ -6,45 +6,40 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col">
-          <agent-table
-            title="Agent List"
+          <group-table
+            title="Group List"
             :data="data"
             :totalItems="totalItems"
-          ></agent-table>
+          ></group-table>
         </div>
       </div>
-    
     </div>
   </div>
 </template>
 <script>
-import AgentTable from "./AgentTable.vue";
+import GroupTable from "./Table.vue";
 import axios from "axios";
 
 export default {
-  name: "AgentList",
+  name: "group-list",
   data() {
     return {
       data: [],
       showError: false,
+      currentPage: 1,
       totalItems: 0,
-      currentPage:1
     };
   },
   components: {
-    AgentTable,
+    GroupTable,
   },
-  mounted() {
-   
+  created() {
     axios
-      .get("agent?_page="+this.currentPage)
+      .get("group?_page=" + this.currentPage)
       .then((response) => {
-        //   alert(response.data);
-        if (response.data[1] == 200) {
-          this.data = response.data[0];
-          sessionStorage.setItem("jwt_token", response.data[2]);
-          console.log(this.data);
-        }
+        sessionStorage.setItem("jwt_token", response.data[2]);
+        this.data = response.data[0];
+        this.totalItems = this.data.length;
       })
       .catch((err) => {
         // alert(err);
@@ -52,6 +47,7 @@ export default {
           alert("Check your network");
         } else if (err.response.status == 302) {
           sessionStorage.setItem("loggedIn", false);
+          sessionStorage.setItem("jwt_token", "");
           console.log(err.response);
           this.$router.push("/login");
         }

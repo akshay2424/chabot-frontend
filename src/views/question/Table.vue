@@ -116,7 +116,7 @@ export default {
     },
     handleAnswer(question_id) {
       this.$router.push({
-        name: "answerList",
+        name: "answer-list",
         params: { question_id: question_id },
       });
     },

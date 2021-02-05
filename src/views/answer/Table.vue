@@ -144,7 +144,7 @@ export default {
     },
     handleAnswer(id) {
       console.log(id);
-      this.$router.push({ name: "answerCreate", params: { question_id: id } });
+      this.$router.push({ name: "answer-create", params: { question_id: id } });
     },
     handleDelete(id) {
       //  console.log(agent_id)
