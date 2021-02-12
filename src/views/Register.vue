@@ -90,10 +90,6 @@ import axios from "axios";
     },
     methods: {
     register() {
-      //we should handle errors in a more scalabe way, but this works for now
-
-      alert(this.form.email + " " + this.form.password + " " + this.rememberMe);
-
       axios
         .post("register", {
           headers: {
