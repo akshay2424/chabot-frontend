@@ -1,5 +1,5 @@
 export default function auth ({ next }){
-    if(sessionStorage.getItem("loggedIn") == "false"){
+    if(localStorage.getItem("loggedIn") == "false"){
         return next({
             name: 'login'
         })

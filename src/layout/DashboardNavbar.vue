@@ -13,7 +13,7 @@
           placeholder="Search"
           class="input-group-alternative"
           alternative=""
-          addon-right-icon="fas fa-search"
+          addon-right-icon="fas fa-search"x`
         >
         </base-input>
       </div> -->
@@ -97,10 +97,13 @@ export default {
         })
         .then((response) => {
           if (response.data[1] == 200) {
-            console.log(sessionStorage.getItem("loggedIn"));
-            sessionStorage.setItem("loggedIn", false);
-            sessionStorage.setItem("jwt_token", "");
-            console.log(sessionStorage.getItem("loggedIn"));
+            // console.log(sessionStorage.getItem("loggedIn"));
+            // // sessionStorage.setItem("loggedIn", false);
+            // // sessionStorage.setItem("jwt_token", "");
+            // console.log(sessionStorage.getItem("loggedIn"));
+
+            localStorage.setItem("jwt_token", response.data[0].token)
+             localStorage.setItem("loggedIn", false)
             this.$router.push("/login");
           }
           console.log(response.data[0].message);

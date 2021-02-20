@@ -3,17 +3,19 @@
     <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
     </base-header>
     <div class="container-fluid mt--7">
-      <chat-window
-        :current-user-id="currentUserId"
-        :rooms="rooms"
-        :messages="messages"
-        :loading-rooms="loadingRooms"
-        :messages-loaded="messagesLoaded"
-        :rooms-loaded="loadedRooms"
-        @fetch-more-rooms="fetchMoreRooms"
-        @fetch-messages="fetchMessages"
-        @send-message="sendMessage"
-      />
+      <div class="col-xl-8 mb-5 mb-xl-0">
+        <chat-window
+          :current-user-id="currentUserId"
+          :rooms="rooms"
+          :messages="messages"
+          :loading-rooms="loadingRooms"
+          :messages-loaded="messagesLoaded"
+          :rooms-loaded="loadedRooms"
+          @fetch-more-rooms="fetchMoreRooms"
+          @fetch-messages="fetchMessages"
+          @send-message="sendMessage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -123,6 +125,7 @@ export default {
     },
 
     async sendMessage({ content, roomId, file, replyMessage }) {
+      // alert("aksk");'=
       const message = {
         sender_id: this.currentUserId,
         content,
@@ -132,22 +135,23 @@ export default {
       console.log("Message:-" + message.sender_id);
       console.log("content:-" + content);
       console.log("roomId:-" + roomId);
-      console.log("file:-" + file);
+      console.log("file:-" + file.localUrl);
       console.log("replyMessage:-" + replyMessage);
 
-      // if (file) {
-      //   message.file = {
-      //     name: file.name,
-      //     size: file.size,
-      //     type: file.type,
-      //     extension: file.extension || file.type,
-      //     url: file.localUrl,
-      //   };
-      //   if (file.audio) {
-      //     message.file.audio = true;
-      //     message.file.duration = file.duration;
-      //   }
-      // }
+      if (file) {
+        message.file = {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          extension: file.extension || file.type,
+          url: file.localUrl,
+        };
+
+        if (file.audio) {
+          message.file.audio = true;
+          message.file.duration = file.duration;
+        }
+      }
 
       // if (replyMessage) {
       //   message.replyMessage = {
@@ -171,12 +175,14 @@ export default {
             organization_id: this.organization_id,
             room_id: message.room_id,
             timestamp: message.timestamp,
+            file:message.file
           },
         })
         .then((response) => {
+          // alert('dj')
           console.log(response.data);
           this.messagesLoaded = true;
-          this.getMessagesFromApi(message.room_id)
+          this.getMessagesFromApi(message.room_id);
           //handle response and save JWT
         })
         .catch((err) => {

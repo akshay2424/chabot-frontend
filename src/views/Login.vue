@@ -116,7 +116,10 @@ export default {
               response.data[0].user["name"]
             );
             console.log(response.data[0].user["name"]);
-            sessionStorage.setItem("jwt_token", response.data[0].token);
+            // sessionStorage.setItem("jwt_token", response.data[0].token);
+             localStorage.setItem("jwt_token", response.data[0].token)
+             localStorage.setItem("loggedIn", true)
+
             sessionStorage.setItem("loggedIn", true);
             console.log(sessionStorage.getItem("jwt_token"));
            

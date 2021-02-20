@@ -18,7 +18,7 @@ Vue.config.productionTip = false
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000/';
-axios.defaults.headers['x-access-token'] =  sessionStorage.getItem("jwt_token");
+axios.defaults.headers['x-access-token'] =  localStorage.getItem("jwt_token");
 axios.defaults.headers['Content-Type'] = "application/json";
 
 // var cors = require('cors')
